@@ -12,13 +12,26 @@ pipeline {
             }
         }
 
-          stage('Test') {
+        stage('Test') {
             steps {
                 sh 'mvn test'
             }
             post {
                 always {
                     junit 'target/surefire-reports/*.xml'
+                }
+            }
+        }
+
+        stage('Manual Approval') {
+            steps {
+                script {
+                    def userInput = input(message: 'Lanjutkan ke tahap Deploy?', ok: 'Proceed', parameters: [choice(name: 'ACTION', choices: 'Proceed\nAbort', description: 'Pilih tindakan')], submitter: 'admin')
+                    if (userInput == 'Proceed') {
+                        echo 'Melanjutkan ke tahap Deploy...'
+                    } else {
+                        error 'Pipeline dihentikan oleh pengguna.'
+                    }
                 }
             }
         }
