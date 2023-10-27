@@ -39,15 +39,8 @@ pipeline {
         stage('Deploy') { 
             steps {
                 sh './jenkins/scripts/deliver.sh' 
-            }
-        }
-
-        stage('Wait for 1 minute') {
-            steps {
-                script {
-                    echo 'Waiting for 1 minute...'
-                    sh 'sleep 1m'
-                }
+                echo 'Waiting for 1 minute...'
+                sh 'sleep 1m'
             }
         }
     }
